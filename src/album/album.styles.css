@@ -1,0 +1,33 @@
+.album {
+  margin: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  background-color: #59b1a3;
+}
+.album-heading {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.user__name {
+  color: #eee;
+}
+
+.album__name {
+  display: flex;
+  justify-content: space-between;
+}
+
+.album__link {
+  align-self: center;
+  background: #eee;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #555;
+}
+
+.album__link:hover {
+  color: #777;
+}

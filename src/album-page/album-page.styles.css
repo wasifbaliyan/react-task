@@ -1,0 +1,19 @@
+/* .album-page__container {
+
+} */
+
+.album-page__heading {
+  color: #555;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.album-page__username {
+  text-align: center;
+  color: #777;
+}
+
+.photos__container {
+  display: flex;
+  flex-wrap: wrap;
+}

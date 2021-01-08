@@ -1,0 +1,15 @@
+.album-photo {
+  width: 150px;
+}
+
+.album__figcaption {
+  font-weight: bold;
+  color: #777;
+  text-transform: capitalize;
+  pad: 0.5rem 0;
+}
+
+.album__img {
+  border-radius: 10px;
+  border: 1px solid teal;
+}
