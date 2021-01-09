@@ -27,7 +27,7 @@ function AlbumPage({ match, location, loading, fetchAlbumDetails, data }) {
 
   useEffect(() => {
     fetchAlbumDetails(match.params.id, location.state.user.id);
-  }, [match.params.id, location.state.user.id]);
+  }, [match.params.id, location.state.user.id, fetchAlbumDetails]);
 
   const paginatedAlbumPhotos = paginate(data[1], currentPage, pageSize);
 
