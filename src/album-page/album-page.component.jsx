@@ -1,20 +1,15 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { connect } from "react-redux";
 import AlbumPhoto from "../album-photo/album-photo.component";
 import Pagination from "../pagination/pagination.component";
 import { paginate } from "../utils/paginate";
+import { fetchAlbumDetails } from "../redux/actions";
 
 import "./album-page.styles.css";
 import Loader from "../loader/loader.component";
 
-export default function AlbumPage({ match, location }) {
-  // const [albumDetails, setAlbumDetails] = useState([]);
-  // const [photos, setPhotos] = useState([]);
-  // const [user, setUser] = useState([]);
-
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+function AlbumPage({ match, location, loading, fetchAlbumDetails, data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 9;
 
@@ -30,52 +25,8 @@ export default function AlbumPage({ match, location }) {
     setCurrentPage(currentPage + 1);
   };
 
-  // useEffect(() => {
-  //   fetch(`https://jsonplaceholder.typicode.com/albums/${match.params.id}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setAlbumDetails(data));
-  // }, [match.params.id]);
-
-  // useEffect(() => {
-  //   fetch(
-  //     `https://jsonplaceholder.typicode.com/albums/${match.params.id}/photos`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => setPhotos(data));
-  // }, [match.params.id]);
-
-  // useEffect(() => {
-  //   fetch(
-  //     `https://jsonplaceholder.typicode.com/users/${location.state.user.id}`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => setUser(data));
-  // }, [location.state.user.id]);
-
   useEffect(() => {
-    Promise.all([
-      fetch(`https://jsonplaceholder.typicode.com/albums/${match.params.id}`),
-      fetch(
-        `https://jsonplaceholder.typicode.com/albums/${match.params.id}/photos`
-      ),
-      fetch(
-        `https://jsonplaceholder.typicode.com/users/${location.state.user.id}`
-      ),
-    ])
-      .then(function (responses) {
-        return Promise.all(
-          responses.map(function (response) {
-            return response.json();
-          })
-        );
-      })
-      .then(function (data) {
-        setData(data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    fetchAlbumDetails(match.params.id, location.state.user.id);
   }, [match.params.id, location.state.user.id]);
 
   const paginatedAlbumPhotos = paginate(data[1], currentPage, pageSize);
@@ -110,3 +61,14 @@ export default function AlbumPage({ match, location }) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  loading: state.fetchAlbumDetails.loading,
+  data: state.fetchAlbumDetails.data,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchAlbumDetails: (id, userId) => dispatch(fetchAlbumDetails(id, userId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumPage);

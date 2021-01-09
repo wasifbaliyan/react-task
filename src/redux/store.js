@@ -1,11 +1,13 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
+import { fetchAlbumsAndUsers, fetchAlbumDetails } from "./reducers";
 import thunkMiddleware from "redux-thunk";
-import { fetchAlbumsAndUsers } from "./reducers";
-import logger from "redux-logger";
-const middlewares = [thunkMiddleware, logger];
 
 const rootReducers = combineReducers({
   fetchAlbumsAndUsers: fetchAlbumsAndUsers,
+  fetchAlbumDetails: fetchAlbumDetails,
 });
 
-export const store = createStore(rootReducers, applyMiddleware(...middlewares));
+export const store = createStore(
+  rootReducers,
+  applyMiddleware(thunkMiddleware)
+);

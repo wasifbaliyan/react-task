@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import Album from "../album/album.component";
 import Pagination from "../pagination/pagination.component";
 import { paginate } from "../utils/paginate";
-// import { fetchAlbumsAndUsers } from "../redux/actions";
-
-import "./album-list.styles.css";
+import { fetchAlbumsAndUsers } from "../redux/actions";
 import Loader from "../loader/loader.component";
 
-function AlbumList() {
-  const [albums, setAlbums] = useState([]);
-  const [loading, setLoading] = useState(true);
+import "./album-list.styles.css";
+
+function AlbumList(props) {
+  const { albums, loading, fetchAlbumsAndUsers } = props;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const onPageChange = (page) => {
@@ -26,29 +26,8 @@ function AlbumList() {
   };
 
   useEffect(() => {
-    Promise.all([
-      fetch("https://jsonplaceholder.typicode.com/albums"),
-      fetch("https://jsonplaceholder.typicode.com/users"),
-    ])
-      .then(function (responses) {
-        return Promise.all(
-          responses.map(function (response) {
-            return response.json();
-          })
-        );
-      })
-      .then(function (data) {
-        setAlbums(data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   fetchAlbumsAndUsers();
-  // }, []);
+    fetchAlbumsAndUsers();
+  }, [fetchAlbumsAndUsers]);
 
   const pageSize = 5;
   const paginatedAlbums = paginate(albums[0], currentPage, pageSize);
@@ -82,14 +61,13 @@ function AlbumList() {
   );
 }
 
-// const mapStateToProps = (state) => ({
-//   albums: state.fetchAlbumsAndUsers.albums,
-//   loading: state.fetchAlbumsAndUsers.loading,
-//   errors: state.fetchAlbumsAndUsers.errors,
-// });
+const mapStateToProps = (state) => ({
+  albums: state.fetchAlbumsAndUsers.albums,
+  loading: state.fetchAlbumsAndUsers.loading,
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchAlbumsAndUsers: () => dispatch(fetchAlbumsAndUsers()),
-// });
+const mapDispatchToProps = (dispatch) => ({
+  fetchAlbumsAndUsers: () => dispatch(fetchAlbumsAndUsers()),
+});
 
-export default AlbumList;
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumList);
